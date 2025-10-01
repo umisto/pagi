@@ -3,33 +3,34 @@ package pagi
 import (
 	"net/http"
 	"strconv"
-
-	"github.com/go-chi/chi/v5"
 )
 
-func GetPagination(r *http.Request) (page, size uint) {
-	pageStr := chi.URLParam(r, "page")
+func GetPagination(r *http.Request) (page, size uint64) {
+	page = 1
+	size = 20
+
+	params := r.URL.Query()
+
+	pageStr := params.Get("page")
 	if pageStr != "" {
-		n, err := strconv.Atoi(pageStr)
-		if err != nil {
-			page = 1
+		n, err := strconv.ParseUint(pageStr, 10, 64)
+		if err == nil {
+			page = n
 		}
-		page = uint(n)
 	}
 
-	sizeStr := chi.URLParam(r, "size")
+	sizeStr := params.Get("size")
 	if sizeStr != "" {
-		n, err := strconv.Atoi(sizeStr)
-		if err != nil {
-			size = 20
+		n, err := strconv.ParseUint(sizeStr, 10, 64)
+		if err == nil {
+			size = n
 		}
-		size = uint(n)
 	}
 
 	return page, size
 }
 
-func PagConvert(page, size uint) (limit, offset uint) {
+func PagConvert(page, size uint64) (limit, offset uint64) {
 	if page == 0 {
 		page = 1
 	}
@@ -40,7 +41,7 @@ func PagConvert(page, size uint) (limit, offset uint) {
 		size = 20
 	}
 
-	limit = uint(size)
-	offset = uint((page - 1) * size)
+	limit = size
+	offset = (page - 1) * size
 	return
 }
