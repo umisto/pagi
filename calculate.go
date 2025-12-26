@@ -1,6 +1,6 @@
 package pagi
 
-func CalculateLimit(limit, def, max int) int {
+func CalculateLimit(limit, def, max uint) uint {
 	if limit <= 0 {
 		return def
 	}
