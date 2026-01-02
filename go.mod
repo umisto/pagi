@@ -1,5 +1,3 @@
-module github.com/umisto/pagi
+module github.com/netbill/pagi
 
 go 1.24.5
-
-require github.com/google/uuid v1.6.0
