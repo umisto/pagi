@@ -146,8 +146,11 @@ func buildURLWithPage(r *http.Request, page, size uint) string {
 	u := *r.URL
 	q := u.Query()
 
-	q.Set("page[number]", strconv.FormatUint(uint64(page), 10))
-	q.Set("page[size]", strconv.FormatUint(uint64(size), 10))
+	q.Set("page", strconv.FormatUint(uint64(page), 10))
+	q.Set("size", strconv.FormatUint(uint64(size), 10))
+
+	q.Del("page[number]")
+	q.Del("page[size]")
 
 	u.RawQuery = q.Encode()
 	return u.String()
